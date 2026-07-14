@@ -17,9 +17,11 @@ app.use('/api', async (req, res, next) => {
     next();
   } catch (error) {
     console.error('MongoDB connection error:', error.message);
-    res.status(500).json({
-      msg: 'Database connection failed. Check MANGO_URI and Atlas Network Access (allow 0.0.0.0/0).',
-    });
+    const msg =
+      error.code === 'MISSING_URI'
+        ? error.message
+        : 'Database connection failed. Check that MANGO_URI on Vercel is correct, then Redeploy. Atlas Network Access should allow 0.0.0.0/0.';
+    res.status(500).json({ msg });
   }
 });
 

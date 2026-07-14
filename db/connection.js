@@ -6,9 +6,19 @@ if (!cached) {
   cached = global.mongoose = { conn: null, promise: null };
 }
 
-const connectDB = async (url = process.env.MANGO_URI) => {
+const getMongoUri = () =>
+  process.env.MANGO_URI ||
+  process.env.MONGODB_URI ||
+  process.env.MONGO_URI ||
+  '';
+
+const connectDB = async (url = getMongoUri()) => {
   if (!url) {
-    throw new Error('MANGO_URI is missing. Add it in Vercel → Project → Settings → Environment Variables');
+    const err = new Error(
+      'MongoDB URI is missing. In Vercel → Settings → Environment Variables, add MANGO_URI with your Atlas connection string, then Redeploy.'
+    );
+    err.code = 'MISSING_URI';
+    throw err;
   }
 
   if (cached.conn) {
@@ -16,10 +26,15 @@ const connectDB = async (url = process.env.MANGO_URI) => {
   }
 
   if (!cached.promise) {
-    cached.promise = mongoose.connect(url, {
-      bufferCommands: false,
-      serverSelectionTimeoutMS: 8000,
-    });
+    cached.promise = mongoose
+      .connect(url, {
+        bufferCommands: false,
+        serverSelectionTimeoutMS: 8000,
+      })
+      .catch((error) => {
+        cached.promise = null;
+        throw error;
+      });
   }
 
   cached.conn = await cached.promise;
