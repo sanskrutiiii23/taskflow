@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TaskFlow — Task Manager</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=Source+Sans+3:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link rel="stylesheet" href="./main.css" />
+  </head>
+  <body>
+    <div class="atmosphere" aria-hidden="true"></div>
+
+    <header class="site-header">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <div>
+          <p class="brand-name">TaskFlow</p>
+          <p class="brand-tagline">Organize work. Ship progress.</p>
+        </div>
+      </div>
+      <button type="button" class="btn btn-ghost" id="clear-completed-btn">
+        Clear completed
+      </button>
+    </header>
+
+    <main class="layout">
+      <section class="hero-panel">
+        <h1>What needs doing?</h1>
+        <p class="hero-copy">
+          Capture tasks, set priorities, and track what matters backed by Node,
+          Express & MongoDB.
+        </p>
+
+        <form class="task-form" id="task-form">
+          <div class="form-row">
+            <label class="sr-only" for="task-name">Task name</label>
+            <input
+              id="task-name"
+              type="text"
+              name="name"
+              class="input task-input"
+              placeholder="e.g. Finish LinkedIn project post"
+              maxlength="80"
+              required
+            />
+          </div>
+
+          <div class="form-grid">
+            <div>
+              <label for="task-priority">Priority</label>
+              <select id="task-priority" name="priority" class="input">
+                <option value="low">Low</option>
+                <option value="medium" selected>Medium</option>
+                <option value="high">High</option>
+              </select>
+            </div>
+            <div>
+              <label for="task-due">Due date</label>
+              <input id="task-due" type="date" name="dueDate" class="input" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <label for="task-description">Notes (optional)</label>
+            <textarea
+              id="task-description"
+              name="description"
+              class="input"
+              rows="2"
+              maxlength="300"
+              placeholder="Add a short note..."
+            ></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary submit-btn">
+              Add task
+            </button>
+            <p class="form-alert" aria-live="polite"></p>
+          </div>
+        </form>
+      </section>
+
+      <section class="board">
+        <div class="stats" id="stats">
+          <article class="stat-card">
+            <p class="stat-label">Total</p>
+            <p class="stat-value" data-stat="total">0</p>
+          </article>
+          <article class="stat-card">
+            <p class="stat-label">Pending</p>
+            <p class="stat-value" data-stat="pending">0</p>
+          </article>
+          <article class="stat-card">
+            <p class="stat-label">Done</p>
+            <p class="stat-value" data-stat="completed">0</p>
+          </article>
+          <article class="stat-card overdue">
+            <p class="stat-label">Overdue</p>
+            <p class="stat-value" data-stat="overdue">0</p>
+          </article>
+        </div>
+
+        <div class="toolbar">
+          <div class="filters" role="tablist" aria-label="Filter tasks">
+            <button type="button" class="chip is-active" data-filter="all">
+              All
+            </button>
+            <button type="button" class="chip" data-filter="pending">
+              Pending
+            </button>
+            <button type="button" class="chip" data-filter="completed">
+              Done
+            </button>
+          </div>
+
+          <div class="toolbar-right">
+            <label class="sr-only" for="search-input">Search tasks</label>
+            <input
+              id="search-input"
+              type="search"
+              class="input search-input"
+              placeholder="Search..."
+            />
+            <label class="sr-only" for="sort-select">Sort tasks</label>
+            <select id="sort-select" class="input sort-select">
+              <option value="newest">Newest</option>
+              <option value="oldest">Oldest</option>
+              <option value="priority">Priority</option>
+              <option value="due">Due date</option>
+            </select>
+          </div>
+        </div>
+
+        <p class="loading-text">Loading tasks...</p>
+        <div class="tasks" id="tasks"></div>
+      </section>
+    </main>
+
+    <div class="modal" id="edit-modal" hidden>
+      <div class="modal-backdrop" data-close-modal></div>
+      <div
+        class="modal-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="edit-title"
+      >
+        <div class="modal-head">
+          <h2 id="edit-title">Edit task</h2>
+          <button
+            type="button"
+            class="icon-btn"
+            data-close-modal
+            aria-label="Close"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <form id="edit-form" class="edit-form">
+          <input type="hidden" id="edit-id" />
+
+          <div class="form-row">
+            <label for="edit-name">Task name</label>
+            <input id="edit-name" class="input" type="text" maxlength="80" required />
+          </div>
+
+          <div class="form-row">
+            <label for="edit-description">Notes</label>
+            <textarea
+              id="edit-description"
+              class="input"
+              rows="3"
+              maxlength="300"
+            ></textarea>
+          </div>
+
+          <div class="form-grid">
+            <div>
+              <label for="edit-priority">Priority</label>
+              <select id="edit-priority" class="input">
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+              </select>
+            </div>
+            <div>
+              <label for="edit-due">Due date</label>
+              <input id="edit-due" type="date" class="input" />
+            </div>
+          </div>
+
+          <label class="check-row">
+            <input id="edit-completed" type="checkbox" />
+            <span>Mark as completed</span>
+          </label>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" id="edit-submit">
+              Save changes
+            </button>
+            <p class="form-alert edit-alert" aria-live="polite"></p>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.8/axios.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="./browser-app.js"></script>
+  </body>
+</html>

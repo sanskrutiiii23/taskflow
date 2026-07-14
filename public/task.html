@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="refresh" content="0;url=index.html" />
+    <title>Redirecting…</title>
+    <script>
+      const id = new URLSearchParams(window.location.search).get('id');
+      window.location.replace(id ? `index.html` : 'index.html');
+    </script>
+  </head>
+  <body>
+    <p>This page moved. <a href="index.html">Go to TaskFlow</a>.</p>
+  </body>
+</html>
