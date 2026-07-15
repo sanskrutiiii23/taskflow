@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign In — TaskFlow</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=Source+Sans+3:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./main.css" />
+    <link rel="stylesheet" href="./auth.css" />
+  </head>
+  <body>
+    <div class="atmosphere" aria-hidden="true"></div>
+
+    <main class="auth-page">
+      <section class="auth-card">
+        <div class="auth-brand">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <div>
+            <p class="brand-name">TaskFlow</p>
+            <p class="brand-tagline">Welcome back</p>
+          </div>
+        </div>
+
+        <h1>Sign in</h1>
+        <p class="auth-copy">Access your private task dashboard.</p>
+
+        <form id="login-form" class="auth-form" novalidate>
+          <div class="form-row">
+            <label for="email">Email</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              class="input"
+              placeholder="you@example.com"
+              autocomplete="email"
+              required
+            />
+          </div>
+
+          <div class="form-row">
+            <label for="password">Password</label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              class="input"
+              placeholder="Your password"
+              autocomplete="current-password"
+              required
+            />
+          </div>
+
+          <p class="form-alert" id="login-alert" aria-live="polite"></p>
+
+          <button type="submit" class="btn btn-primary auth-submit" id="login-submit">
+            Sign in
+          </button>
+        </form>
+
+        <p class="auth-switch">
+          Don't have an account?
+          <a href="./signup.html">Create one</a>
+        </p>
+      </section>
+    </main>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.8/axios.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="./app-utils.js"></script>
+    <script src="./auth.js"></script>
+    <script>
+      initAuthPage('login');
+    </script>
+  </body>
+</html>

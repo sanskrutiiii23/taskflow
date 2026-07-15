@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up — TaskFlow</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=Source+Sans+3:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./main.css" />
+    <link rel="stylesheet" href="./auth.css" />
+  </head>
+  <body>
+    <div class="atmosphere" aria-hidden="true"></div>
+
+    <main class="auth-page">
+      <section class="auth-card">
+        <div class="auth-brand">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <div>
+            <p class="brand-name">TaskFlow</p>
+            <p class="brand-tagline">Get started</p>
+          </div>
+        </div>
+
+        <h1>Create account</h1>
+        <p class="auth-copy">Your tasks stay private to your account.</p>
+
+        <form id="signup-form" class="auth-form" novalidate>
+          <div class="form-row">
+            <label for="name">Name</label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              class="input"
+              placeholder="Your name"
+              autocomplete="name"
+              required
+            />
+          </div>
+
+          <div class="form-row">
+            <label for="email">Email</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              class="input"
+              placeholder="you@example.com"
+              autocomplete="email"
+              required
+            />
+          </div>
+
+          <div class="form-row">
+            <label for="password">Password</label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              class="input"
+              placeholder="At least 6 characters"
+              autocomplete="new-password"
+              required
+            />
+          </div>
+
+          <p class="form-alert" id="signup-alert" aria-live="polite"></p>
+
+          <button type="submit" class="btn btn-primary auth-submit" id="signup-submit">
+            Create account
+          </button>
+        </form>
+
+        <p class="auth-switch">
+          Already have an account?
+          <a href="./login.html">Sign in</a>
+        </p>
+      </section>
+    </main>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.8/axios.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="./app-utils.js"></script>
+    <script src="./auth.js"></script>
+    <script>
+      initAuthPage('signup');
+    </script>
+  </body>
+</html>
