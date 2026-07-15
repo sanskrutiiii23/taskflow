@@ -4,10 +4,13 @@ const tasks = require('./routes/tasks');
 const connectDB = require('./db/connection');
 const notFound = require('./middleware/notfound');
 const errorHandlerMiddleware = require('./middleware/errorhandler');
+const cookieParser = require('cookie-parser');
+const authRoutes = require('./routes/auth');
 
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Ensure MongoDB is connected before API routes (needed for Vercel serverless)
@@ -24,7 +27,7 @@ app.use('/api', async (req, res, next) => {
     res.status(500).json({ msg });
   }
 });
-
+app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/tasks', tasks);
 
 app.use(notFound);
