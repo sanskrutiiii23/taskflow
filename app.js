@@ -8,6 +8,13 @@ const cookieParser = require('cookie-parser');
 const authRoutes = require('./routes/auth');
 
 const app = express();
+app.get('/api/debug', (req, res) => {
+  res.json({ message: 'debug works' });
+});
+
+app.get('/api/v1/auth/debug', (req, res) => {
+  res.json({ message: 'auth router is mounted' });
+});
 
 app.use(express.json());
 app.use(cookieParser());
